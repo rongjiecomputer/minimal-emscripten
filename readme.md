@@ -72,7 +72,7 @@ fetch("binjigb-opt.wasm")
 });
 ```
 
-For simple hello world example, it should looks like this.
+For simple hello world example, it should look something like this.
 
 ```js
 var Module = {};
