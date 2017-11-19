@@ -214,7 +214,7 @@ to list down imported and exported functions, but since some JS functions have d
 
 ### Exceptions and Threads
 
-I have not figured out how to implement C++ exceptiosna and pthreads in JS. Hopefully
+I have not figured out how to implement C++ exceptions and pthreads in JS. Hopefully
 [Exception](https://github.com/WebAssembly/exception-handling) and
 [Thread](https://github.com/WebAssembly/threads) proposals will make it easier.
 
