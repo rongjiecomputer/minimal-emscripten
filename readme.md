@@ -41,14 +41,17 @@ wasm-opt -O2 -o binjigb-opt.wasm binjigb.wasm
 
 ### Use case supported.
 
-- Assume latest browser, so WebAssembly mode only.
+- `TOTAL_MEMORY`, `TOTAL_STACK`, `GLOBAL_BASE` and `STATIC_BUMP` are determined in code generation rather than in runtime, I doubt if any user actually tunes them in runtime.
+- Assume latest browser, no polyfill, native WebAssembly mode only.
+- `MODULARIZE` mode only and exports as little functions as possible, this allows closure compiler to do more DCE.
 - Only uses simple C libraries such as `printf`.
 - NO GL, SDL etc. Write your own JS code to handle keyboard/mouse interaction, graphic and audio.
   `.wasm` should only do maths operations.
-- No `EM_ASM`.
+- No `EM_ASM`, a very bad practice in my opinion.
 - Directly call WebAssembly functions (`instance.exports.main()`), no wrapper function (`ccall`, `cwrap`).
-  
-[binjigb](https://github.com/binji/binjgb) statisfies most of these contraints.
+- No `ccall`, string stuff and other utilities for JS convenience in _generated code_. I might put some string/array helper functions in a separate util.js and user can optionally include it, but still no for `ccall` and `cwrap`.
+
+[binjgb](https://github.com/binji/binjgb) statisfies most of these contraints.
 
 ```js
 // See demo.html
@@ -82,15 +85,15 @@ fetch("hello.wasm")
 .then(WebAssembly.compile)
 .then(module => WebAssembly.instantiate(module, hello.imports))
 .then(instance => {
-  // hello.preMain();
+  // hello.preMain(instance.exports);
   instance.exports.main();
-  // hello.postMain();
+  // hello.postMain(instance.exports);
 });
 ```
 
 ## What the generated JS code does.
 
-- Set up stack, heap and static memory `WebAssembly.Memory`.
+- Set up stack, heap and static memory in `WebAssembly.Memory`.
 - Provide import object for `WebAssembly.instantiate` (see [gen.js#L298](gen.js#L298)).
 - Provide `preMain` and `postMain` that must be run before and after `instance.exports.main()` is called.
 
