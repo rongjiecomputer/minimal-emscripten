@@ -27,9 +27,9 @@ function BinjiGB(object) {
   updateGlobalBufferViews();
 
   var STATIC_BASE = 1024;
-  var STATICTOP = 13760;
-  var STATIC_BUMP = 12720;
-  var tempDoublePtr = 13744;
+  var STATICTOP = 13880;
+  var STATIC_BUMP = 12840;
+  var tempDoublePtr = 13864;
 
   var TOTAL_STACK = 5242880;
   var TOTAL_MEMORY = 16777216;
