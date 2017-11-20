@@ -53,6 +53,8 @@ wasm-opt -O2 -o binjigb-opt.wasm binjigb.wasm
 
 [binjgb](https://github.com/binji/binjgb) statisfies most of these contraints.
 
+Loader code which user needs to write for binjgb:
+
 ```js
 // See demo.html
 var Module = {};
@@ -75,7 +77,7 @@ fetch("binjigb-opt.wasm")
 });
 ```
 
-For simple hello world example, it should look something like this.
+For simple hello world example, loader code which user needs to write should look something like this:
 
 ```js
 var Module = {};
