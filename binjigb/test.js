@@ -34,7 +34,7 @@ function BinjiGB(object) {
   var TOTAL_STACK = 5242880;
   var TOTAL_MEMORY = 16777216;
 
-  var DYNAMICTOP_PTR = allocate();
+  var DYNAMICTOP_PTR = staticAlloc(4);
   var STACKTOP = alignMemory(STATICTOP);
   var STACK_BASE = STACKTOP;
   var STACK_MAX = STACK_BASE + TOTAL_STACK;
@@ -257,21 +257,6 @@ console.log("DYNAMIC_BASE: ",DYNAMIC_BASE);
     return ret;
   }
 
-  function allocate() {
-    var zeroinit = true;
-    var size = 1;
-    var stop;
-    var ret = staticAlloc(1);
-    var ptr = ret;
-    stop = ret + (size & ~3);
-    for (; ptr < stop; ptr += 4)
-      HEAP32[((ptr)>>2)] = 0;
-    stop = ret + size;
-    while (ptr < stop)
-      HEAP8[((ptr++)>>0)] = 0;
-    return ret;
-  }
-
   function mergeMemory(newBuffer) {
     var oldBuffer = object["buffer"];
     var oldView = new Uint8Array(oldBuffer);
@@ -307,8 +292,8 @@ console.log("DYNAMIC_BASE: ",DYNAMIC_BASE);
 
   return {
     "imports": imports,
-    "mergeMemory": mergeMemory,
-    "dump": dump,
+    //"mergeMemory": mergeMemory,
+    //"dump": dump,
     "preMain": preMain,
     "postMain": postMain,
   };

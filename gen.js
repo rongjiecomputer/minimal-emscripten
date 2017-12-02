@@ -45,7 +45,7 @@ const tmpl = () => `function ${MODULE_NAME}(object) {
   var TOTAL_STACK = ${TOTAL_STACK};
   var TOTAL_MEMORY = ${TOTAL_MEMORY};
 
-  var DYNAMICTOP_PTR = allocate();
+  var DYNAMICTOP_PTR = staticAlloc(4);
   var STACKTOP = alignMemory(STATICTOP);
   var STACK_BASE = STACKTOP;
   var STACK_MAX = STACK_BASE + TOTAL_STACK;
@@ -270,21 +270,6 @@ const tmpl = () => `function ${MODULE_NAME}(object) {
     return ret;
   }
 
-  function allocate() {
-    var zeroinit = true;
-    var size = 1;
-    var stop;
-    var ret = staticAlloc(1);
-    var ptr = ret;
-    stop = ret + (size & ~3);
-    for (; ptr < stop; ptr += 4)
-      HEAP32[((ptr)>>2)] = 0;
-    stop = ret + size;
-    while (ptr < stop)
-      HEAP8[((ptr++)>>0)] = 0;
-    return ret;
-  }
-
   function mergeMemory(newBuffer) {
     var oldBuffer = object["buffer"];
     var oldView = new Uint8Array(oldBuffer);
@@ -320,8 +305,8 @@ const tmpl = () => `function ${MODULE_NAME}(object) {
 
   return {
     "imports": imports,
-    "mergeMemory": mergeMemory,
-    "dump": dump,
+    //"mergeMemory": mergeMemory,
+    //"dump": dump,
     "preMain": preMain,
     "postMain": postMain,
   };
